@@ -4,5 +4,5 @@ This is a <b>REST API</b> built using <b><i>Django REST framework (DRF), VUE Js,
 
 This REST API has several features including :-  
 ⭐ Fuzzy search (to search even if the words are not spelled exactly the same)  
-⭐ Full-text search
+⭐ Full-text search ((to search specific words or phrases)
 
