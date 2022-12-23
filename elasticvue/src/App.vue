@@ -2,13 +2,15 @@
   <div class="container mt-5">
     <form @submit.prevent="search" class="mb-3">
       <div class="form-group row">
-        <label for="query" class="col-sm-2 col-form-label"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /> Search:</label>
+        <label for="query" class="col-sm-2 col-form-label"><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+          Search:</label>
         <div class="col-sm-10">
           <input id="query" v-model="query" class="form-control" />
         </div>
       </div>
       <div class="form-group row my-4"> <!-- added the my-4 class here -->
-        <label for="searchType" class="col-sm-2 col-form-label"><font-awesome-icon icon="fa-solid fa-filter" /> Search Type:</label>
+        <label for="searchType" class="col-sm-2 col-form-label"><font-awesome-icon icon="fa-solid fa-filter" /> Search
+          Type:</label>
         <div class="col-sm-10">
           <select id="searchType" v-model="searchType" class="form-control form-select">
             <option value="full-text">Full-text</option>
@@ -27,11 +29,13 @@
 
 
     <div v-if="query && submitted">
-      <p class="mb-3">{{ total.value }} results found for '{{query}}'</p>
+      <p class="mb-3">{{ total.value }} results found for '{{ query }}'</p>
       <ul class="list-group">
-        <li v-for="article in articles" :key="article.id" class="list-group-item">
-          Title:{{ article._source.title }}<br>Content:{{ article._source.content }}
+        <li v-for="article in highlightedArticles" :key="article.id" class="list-group-item">
+          Title: <div v-html="article._source.highlightedTitle"></div><br>
+          Content: <div v-html="article._source.highlightedContent"></div>
         </li>
+
       </ul>
     </div>
   </div>
@@ -39,7 +43,6 @@
 
 <script>
 import axios from 'axios'
-
 export default {
   data() {
     return {
@@ -53,7 +56,6 @@ export default {
   methods: {
     async search() {
       try {
-        this.loading = true
         let params = {}
         if (this.searchType === 'full-text') {
           params.q = `title:${this.query} OR content:${this.query}`
@@ -77,5 +79,28 @@ export default {
       }
     },
   },
+  computed: {
+    highlightedArticles() {
+      return this.articles.map(article => {
+        let highlightedTitle = article._source.title.replace(new RegExp(this.query, 'gi'), `<span class="highlight">${this.query}</span>`);
+        let highlightedContent = article._source.content.replace(new RegExp(this.query, 'gi'), `<span class="highlight">${this.query}</span>`);
+        return {
+          ...article,
+          _source: {
+            ...article._source,
+            highlightedTitle,
+            highlightedContent,
+          }
+        }
+      })
+    }
+  }
 }
 </script>
+
+<style>
+.highlight {
+  background-color: cyan;
+  font-weight: bold;
+}
+</style>
