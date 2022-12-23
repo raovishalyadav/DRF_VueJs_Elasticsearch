@@ -31,11 +31,15 @@
     <div v-if="query && submitted">
       <p class="mb-3">{{ total.value }} results found for '{{ query }}'</p>
       <ul class="list-group">
-        <li v-for="article in highlightedArticles" :key="article.id" class="list-group-item">
-          Title: <div v-html="article._source.highlightedTitle"></div><br>
-          Content: <div v-html="article._source.highlightedContent"></div>
+        <li v-for="(article, index) in highlightedArticles" :key="article.id" class="list-group-item p-2 border border-info">
+          <p class="fw-bold text-decoration-underline">Result {{ index + 1 }}:</p>
+          <p>Title:
+            <div v-html="article._source.highlightedTitle"></div>
+          </p>
+          <p>Content:
+            <div v-html="article._source.highlightedContent"></div>
+          </p>
         </li>
-
       </ul>
     </div>
   </div>
@@ -82,8 +86,8 @@ export default {
   computed: {
     highlightedArticles() {
       return this.articles.map(article => {
-        let highlightedTitle = article._source.title.replace(new RegExp(this.query, 'gi'), `<span class="highlight">${this.query}</span>`);
-        let highlightedContent = article._source.content.replace(new RegExp(this.query, 'gi'), `<span class="highlight">${this.query}</span>`);
+        let highlightedTitle = article._source.title.replace(new RegExp(this.query, 'gi'), `<span class="bg-info fw-bold">${this.query}</span>`);
+        let highlightedContent = article._source.content.replace(new RegExp(this.query, 'gi'), `<span class="bg-info fw-bold">${this.query}</span>`);
         return {
           ...article,
           _source: {
@@ -99,8 +103,5 @@ export default {
 </script>
 
 <style>
-.highlight {
-  background-color: cyan;
-  font-weight: bold;
-}
+
 </style>
