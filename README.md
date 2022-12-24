@@ -4,6 +4,7 @@ This is a <b>REST API</b> built using <b><i>Django REST framework (DRF), VUE Js,
 
 This REST API has several features including :-
 
+⭐ "Search as you type" feature   
 ⭐ Full-text search (to search specific words or phrases)  
 ⭐ Boolean search (to combine multiple search queries with logical operators such as AND, OR, and NOT)  
 ⭐ Fuzzy search (to search even if the words are not spelled exactly the same)  
